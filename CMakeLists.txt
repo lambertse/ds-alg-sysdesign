@@ -18,3 +18,4 @@ include_directories(datastructure/)
 
 add_subdirectory(datastructure/balanced_binary_tree)
 add_subdirectory(datastructure/skip_list)
+add_subdirectory(datastructure/geohash)
