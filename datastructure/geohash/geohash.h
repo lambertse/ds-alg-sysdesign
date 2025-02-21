@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 
 struct GeoPoint {
@@ -9,6 +8,17 @@ struct GeoPoint {
 };
 
 using GeoHash = std::string;
+enum class Direction { North, South, East, West };
+struct GeoAdjacent {
+  GeoHash north;
+  GeoHash south;
+  GeoHash east;
+  GeoHash west;
+  GeoHash southeast;
+  GeoHash southwest;
+  GeoHash northeast;
+  GeoHash northwest;
+};
 
 class GeoBound;
 class GeoHashCalculator {
@@ -17,6 +27,8 @@ public:
 
   static GeoHash encode(const GeoPoint &point);
   static GeoPoint decode(const GeoHash &hash);
+  static GeoHash adjecent(const GeoHash &hash, Direction direction);
+  static GeoAdjacent adjacent(const GeoHash &hash);
 
 public:
   static int sPrecision;

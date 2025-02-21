@@ -60,6 +60,26 @@ TEST(GeoHashCalculatorTest, Decode) {
   }
 }
 
+TEST(GeoHashCalculatorTest, Adjecent) {
+  GeoHash hash = "9q8yy";
+  GeoHash northHash = GeoHashCalculator::adjecent(hash, Direction::North);
+  GeoHash easternHash = GeoHashCalculator::adjecent(hash, Direction::East);
+  GeoHash southHash = GeoHashCalculator::adjecent(hash, Direction::South);
+  GeoHash westernHash = GeoHashCalculator::adjecent(hash, Direction::West);
+
+  EXPECT_EQ(GeoHashCalculator::adjecent(northHash, Direction::East),
+            GeoHashCalculator::adjecent(easternHash, Direction::North));
+
+  EXPECT_EQ(GeoHashCalculator::adjecent(easternHash, Direction::South),
+            GeoHashCalculator::adjecent(southHash, Direction::East));
+
+  EXPECT_EQ(GeoHashCalculator::adjecent(southHash, Direction::West),
+            GeoHashCalculator::adjecent(westernHash, Direction::South));
+
+  EXPECT_EQ(GeoHashCalculator::adjecent(westernHash, Direction::North),
+            GeoHashCalculator::adjecent(northHash, Direction::West));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

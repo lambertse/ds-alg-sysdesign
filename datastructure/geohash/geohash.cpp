@@ -1,4 +1,6 @@
 #include "geohash.h"
+#include <map>
+#include <vector>
 
 constexpr double MAX_LONGITUDE = 180.0;
 constexpr double MIN_LONGITUDE = -180.0;
@@ -44,7 +46,7 @@ int GeoHashCalculator::sPrecision = 12;
 GeoHash GeoHashCalculator::encode(const GeoPoint &point) {
   if (point.longitude < MIN_LONGITUDE || point.longitude > MAX_LONGITUDE ||
       point.latitude < MIN_LATITUDE || point.latitude > MAX_LATITUDE) {
-    throw std::invalid_argument("Invalid latitude or longitude");
+    return ""; // Invalid point
   }
 
   GeoHash hash;
@@ -151,6 +153,67 @@ GeoPoint GeoHashCalculator::decode(const GeoHash &hash) {
   ret.latitude = (bound.maxLat + bound.minLat) / 2;
   ret.longitude = (bound.maxLong + bound.minLong) / 2;
   return ret;
+}
+
+// See the detail on matrix.txt
+/* Example:
+ *  Length even (mean that type equal 0)
+ *  adjecent to the north of character '0' is
+ *      kAdjecentMap[North][0<type>][0]
+ * */
+static std::map<Direction, std::vector<std::string>> kAdjecentMap = {
+    {Direction::North,
+     {"p0r21436x8zb9dcf5h7kjnmqesgutwvy", "bc01fg45238967deuvhjyznpkmstqrwx"}},
+    {Direction::South,
+     {"14365h7k9dcfesgujnmqp0r2twvyx8zb", "238967debc01fg45kmstqrwxuvhjyznp"}},
+    {Direction::East,
+     {"bc01fg45238967deuvhjyznpkmstqrwx", "p0r21436x8zb9dcf5h7kjnmqesgutwvy"}},
+    {Direction::West,
+     {"238967debc01fg45kmstqrwxuvhjyznp", "14365h7k9dcfesgujnmqp0r2twvyx8zb"}}};
+static std::map<Direction, std::vector<std::string>> kBorder = {
+    {Direction::North, {"prxz", "bcfguvyz"}},
+    {Direction::South, {"028b", "0145hjnp"}},
+    {Direction::East, {"bcfguvyz", "prxz"}},
+    {Direction::West, {"0145hjnp", "028b"}}};
+
+const int indexOf(const char &c, const std::string &str) {
+  for (int i = 0; i < str.length(); i++) {
+    if (c == str[i])
+      return i;
+  }
+  return -1;
+}
+
+GeoHash GeoHashCalculator::adjecent(const GeoHash &hash, Direction direction) {
+  // See the representation of geohash in the comment above
+  GeoHash adjecentHash;
+  auto lastChar = hash.back();
+  auto parent = hash.substr(0, hash.length() - 1);
+  int type = hash.length() % 2;
+
+  // Incase lastChar is on border, and move to other box. Ex: char 'p' and move
+  // top => It will move to another box. Now the parent is not the common parent
+  if (indexOf(lastChar, kBorder[direction][type]) != -1 && !parent.empty()) {
+    parent = GeoHashCalculator::adjecent(parent, direction);
+  }
+
+  int index = indexOf(lastChar, kAdjecentMap[direction][type]);
+  return parent + kBase32[index];
+}
+
+GeoAdjacent GeoHashCalculator::adjacent(const GeoHash &hash) {
+  GeoAdjacent adj;
+  adj.north = adjecent(hash, Direction::North);
+  adj.south = adjecent(hash, Direction::South);
+  adj.east = adjecent(hash, Direction::East);
+  adj.west = adjecent(hash, Direction::West);
+
+  adj.northeast = adjecent(adj.north, Direction::East);
+  adj.northwest = adjecent(adj.north, Direction::West);
+  adj.southeast = adjecent(adj.south, Direction::East);
+  adj.southwest = adjecent(adj.south, Direction::West);
+
+  return adj;
 }
 
 namespace util {
