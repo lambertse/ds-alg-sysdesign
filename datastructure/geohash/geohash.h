@@ -10,6 +10,7 @@ struct GeoPoint {
 
 using GeoHash = std::string;
 
+class GeoBound;
 class GeoHashCalculator {
 public:
   GeoHashCalculator();
@@ -21,4 +22,5 @@ public:
   static int sPrecision;
 
 private:
+  static GeoBound bound(const GeoHash &hash);
 };
