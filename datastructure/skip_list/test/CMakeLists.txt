@@ -1,3 +1,0 @@
-add_executable(skip_list_test skip_list_test.cpp)
-target_link_libraries(skip_list_test gtest_main)
-

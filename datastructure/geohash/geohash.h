@@ -1,5 +1,7 @@
 #include <string>
 
+namespace datastructure {
+
 struct GeoPoint {
   double latitude;
   double longitude;
@@ -36,3 +38,4 @@ public:
 private:
   static GeoBound bound(const GeoHash &hash);
 };
+} // namespace datastructure

@@ -1,7 +1,7 @@
 
 #include "geohash/geohash.h"
 #include <gtest/gtest.h>
-
+using namespace datastructure;
 // Test case for the GeoHashCalculator::encode function
 TEST(GeoHashCalculatorTest, Encode) {
   // Known coordinates and their expected geohash values

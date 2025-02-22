@@ -2,6 +2,7 @@
 #include "skip_list/skip_list.h"
 #include <gtest/gtest.h>
 #include <limits.h>
+using namespace datastructure;
 
 // Custom object for testing
 class CustomObject {

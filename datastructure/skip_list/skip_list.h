@@ -1,8 +1,8 @@
 #include <cstdlib>
 #include <ctime>
-#include <iostream>
-#include <string>
 #include <vector>
+
+namespace datastructure {
 
 #define MAX_LEVEL 33
 
@@ -116,3 +116,4 @@ int randomLevel() {
 }
 
 } // namespace util
+} // namespace datastructure

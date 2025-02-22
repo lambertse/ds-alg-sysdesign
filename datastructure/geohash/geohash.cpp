@@ -2,6 +2,7 @@
 #include <map>
 #include <vector>
 
+namespace datastructure {
 constexpr double MAX_LONGITUDE = 180.0;
 constexpr double MIN_LONGITUDE = -180.0;
 constexpr double MAX_LATITUDE = 90.0;
@@ -225,3 +226,4 @@ int findIdx(const char &c) {
   return -1;
 }
 } // namespace util
+} // namespace datastructure
