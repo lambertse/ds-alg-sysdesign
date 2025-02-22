@@ -19,6 +19,15 @@ This repository contains implementations and explanations of various data struct
 - [ ] Decode a geohash string into a latitude and longitude pair.
 - [ ] Find bounds and adjacent geohashes from strings.
 
+### Count-min sketch
+
+- [ ] Implement a count-min sketch in `C++`, using templates to support different data types (int, string).
+- [ ] Initialize the count-min sketch with error and certainty parameters.
+- [ ] Insert a new element into the count-min sketch.
+- [ ] Estimate the frequency of an element from the count-min sketch.
+- [ ] Compare Count-min sketch with Multiset: 
+  - ![Count-min sketch](docs/count-min-sketch.png)
+
 ## Algorithms
 
 - [ ] Add sorting algorithms (e.g., quicksort, mergesort).

@@ -6,3 +6,4 @@ endmacro()
 
 add_test_executable(geohash)
 add_test_executable(skip_list)
+add_test_executable(countmin_sketch)
