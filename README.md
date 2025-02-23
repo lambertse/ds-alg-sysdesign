@@ -26,7 +26,7 @@ This repository contains implementations and explanations of various data struct
 - [ ] Insert a new element into the count-min sketch.
 - [ ] Estimate the frequency of an element from the count-min sketch.
 - [ ] Compare Count-min sketch with Multiset: 
-  - ![Count-min sketch](docs/count-min-sketch.png)
+  - ![Count-min sketch](./docs/count-min-sketch.png)
 
 ## Algorithms
 

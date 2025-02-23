@@ -1,7 +1,9 @@
 
 #include "skip_list/skip_list.h"
+#include <chrono>
 #include <gtest/gtest.h>
 #include <limits.h>
+#include <set>
 using namespace datastructure;
 
 // Custom object for testing
@@ -81,7 +83,73 @@ TEST_F(SkipListTest, CustomObjectInsertAndFind) {
   EXPECT_FALSE(customSkipList.contain(CustomObject(4)));
 }
 
+void testPerformance() {
+  SkipList<int> skipList;
+  std::set<int> stdSet;
+  const int numElements = 10000;
+
+  // Measure insertion time
+  auto start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    skipList.insert(i);
+  }
+  auto end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> skipListInsertTime = end - start;
+
+  start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    stdSet.insert(i);
+  }
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> stdSetInsertTime = end - start;
+
+  // Measure search time
+  start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    skipList.contain(i);
+  }
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> skipListSearchTime = end - start;
+
+  start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    stdSet.find(i);
+  }
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> stdSetSearchTime = end - start;
+
+  // Measure deletion time
+  start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    skipList.deleteValue(i);
+  }
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> skipListDeleteTime = end - start;
+
+  start = std::chrono::high_resolution_clock::now();
+  for (int i = 0; i < numElements; ++i) {
+    stdSet.erase(i);
+  }
+  end = std::chrono::high_resolution_clock::now();
+  std::chrono::duration<double> stdSetDeleteTime = end - start;
+
+  // Output results
+  std::cout << "SkipList Insert Time: " << skipListInsertTime.count()
+            << " seconds\n";
+  std::cout << "std::set Insert Time: " << stdSetInsertTime.count()
+            << " seconds\n";
+  std::cout << "SkipList Search Time: " << skipListSearchTime.count()
+            << " seconds\n";
+  std::cout << "std::set Search Time: " << stdSetSearchTime.count()
+            << " seconds\n";
+  std::cout << "SkipList Delete Time: " << skipListDeleteTime.count()
+            << " seconds\n";
+  std::cout << "std::set Delete Time: " << stdSetDeleteTime.count()
+            << " seconds\n";
+}
+
 int main(int argc, char **argv) {
+  testPerformance();
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }

@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <climits>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
@@ -7,7 +8,7 @@
 namespace datastructure {
 namespace hashing {
 template <typename Type> uint32_t hash(const Type &key, const int &seed) {
-  abort("Not support type!");
+  static_assert(true, "Type is not supported by hash function");
 }
 
 template <> uint32_t hash<int>(const int &key, const int &seed) {
